@@ -1,7 +1,7 @@
-enum 50100 MaritalStatusEnum
+enum 50100 "Marital Status"
 {
     Extensible = true;
-    
+
     value(0; Married)
     {
         Caption = 'Married';

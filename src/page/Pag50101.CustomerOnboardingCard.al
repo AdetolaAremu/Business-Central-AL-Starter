@@ -14,6 +14,7 @@ page 50101 "Customer Onboarding Card"
                 field(No; Rec.No)
                 {
                     ApplicationArea = All;
+                    Editable = false;
                 }
                 field(First_Name; Rec.First_Name)
                 {
@@ -31,6 +32,10 @@ page 50101 "Customer Onboarding Card"
                 {
                     ApplicationArea = All;
                 }
+                field("Phone Number"; Rec.Phone_Number)
+                {
+                    ApplicationArea = All;
+                }
                 field(Gender; Rec.Gender)
                 {
                     ApplicationArea = All;
@@ -42,8 +47,21 @@ page 50101 "Customer Onboarding Card"
                 field("Date Of Birth"; Rec.Date_Of_Birth)
                 {
                     ApplicationArea = All;
-                    ShowMandatory = true; // this field is not mandatory
+                    ShowMandatory = true; // this field is mandatory
                 }
+                field("Employer Code"; Rec.Employer)
+                {
+                    ApplicationArea = All;
+                }
+                field(Customer; Rec."Customer ID")
+                {
+                    ApplicationArea = All;
+                }
+                // field("Employer Name"; Rec."Employer Name")
+                // {
+                //     ApplicationArea = All;
+                //     Editable = false;
+                // }
             }
             group("Audit Details")
             {
@@ -65,6 +83,25 @@ page 50101 "Customer Onboarding Card"
     {
         area(Processing)
         {
+            action("Create Customer")
+            {
+                ApplicationArea = All;
+                Image = Customer;
+                Promoted = true;
+                PromotedCategory = Process;
+                Visible = (Rec.status = Rec.status::Open) and (Rec."Customer ID" = '');
+
+                trigger OnAction()
+                var
+                    custNo: Code[20];
+                begin
+                    if not Confirm('Are you sure you want to create customer?') then exit;
+                    custNo := custOnboardingMgt.CreateCustomer(Rec);
+                    Message(StrSubstNo('The customer %1 was successfully created', custNo));
+                end;
+
+            }
+
             action("Send for approval")
             {
                 ApplicationArea = All;
@@ -143,4 +180,7 @@ page 50101 "Customer Onboarding Card"
             }
         }
     }
+
+    var
+        custOnboardingMgt: codeunit "Customer Onboarding";
 }

@@ -7,7 +7,7 @@ tableextension 50100 "Customer ext.al" extends Customer
             Caption = 'DOB';
             DataClassification = ToBeClassified;
         }
-        field(50101; "Gender"; Option)
+        field(50111; "Gender"; Option)
         {
             DataClassification = ToBeClassified;
             OptionMembers = Male,Female;
@@ -17,11 +17,9 @@ tableextension 50100 "Customer ext.al" extends Customer
         {
             DataClassification = ToBeClassified;
         }
-        field(50103; "Marital Status"; Option)
+        field(50103; "Marital Status"; Enum "Marital Status")
         {
-            DataClassification = ToBeClassified;
-            OptionMembers = Married,Single,Divorced,"Not Interested";
-            OptionCaption = ' ,Married,Single,Divorced,"Not Interested"';
+
         }
         field(50104; "Next of kin"; Code[20])
         {

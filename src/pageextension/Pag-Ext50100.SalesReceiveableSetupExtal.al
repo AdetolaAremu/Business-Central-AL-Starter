@@ -8,6 +8,10 @@ pageextension 50100 "Sales&ReceiveableSetupExt.al" extends "Sales & Receivables 
             {
                 ApplicationArea = All;
             }
+            field("Employer No"; Rec."Employer No")
+            {
+                ApplicationArea = All;
+            }
         }
 
     }

@@ -8,5 +8,11 @@ tableextension 50101 "SalesAndReceiveables Ext.al" extends "Sales & Receivables 
             DataClassification = ToBeClassified;
             TableRelation = "No. Series";
         }
+        field(50101; "Employer No"; Code[20])
+        {
+            Caption = 'Employer No';
+            DataClassification = ToBeClassified;
+            TableRelation = "No. Series";
+        }
     }
 }

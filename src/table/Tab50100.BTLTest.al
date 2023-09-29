@@ -52,11 +52,9 @@ table 50100 BTLTest
         {
             Caption = 'Phone_Number';
         }
-        field(10; Marital_Status; Enum MaritalStatusEnum)
+        field(10; Marital_Status; Enum "Marital Status")
         {
             Caption = 'Martial_Status';
-            // OptionMembers = Married,Single,Divorced,"Not Interested";
-            // OptionCaption = ' ,Married,Single,Divorced,"Not Interested"';
         }
         field(11; Email_Address; Text[50])
         {
@@ -67,20 +65,32 @@ table 50100 BTLTest
         {
             Caption = 'Physical_Address';
         }
-        field(13; Employer; Text[200])
+        field(13; Employer; Code[20])
         {
-            Caption = 'Employer';
+            Caption = 'Employer Code';
+            TableRelation = Employer;
+
+            trigger OnValidate()
+            var
+                getEmployer: Record Employer;
+            begin
+                if getEmployer.Get("Employer Name") then
+                    "Employer Name" := getEmployer."Employer Name";
+            end;
+        }
+        field(25; "Employer Name"; Text[200])
+        {
+            DataClassification = ToBeClassified;
+            Editable = false;
         }
         field(14; Next_of_kin; Code[20])
         {
             Caption = 'Next_of_kin';
             TableRelation = Contact;
         }
-        field(15; status; Option)
+        field(15; status; Enum StatusEnum)
         {
             Caption = 'status';
-            OptionCaption = 'Open,Pending Approval,rejected,approved';
-            OptionMembers = Open,"Pending Approval",rejected,approved;
         }
         field(16; approved_by; Code[20])
         {
@@ -104,7 +114,7 @@ table 50100 BTLTest
         }
         field(21; modifiedOn; DateTime)
         {
-            Caption = 'modiefiedon';
+            Caption = 'modified on';
             DataClassification = ToBeClassified;
         }
         field(22; modifiedby; Code[20])
@@ -115,6 +125,12 @@ table 50100 BTLTest
         field(24; "Number series"; Code[20])
         {
             DataClassification = ToBeClassified;
+        }
+        field(26; "Customer ID"; Code[20])
+        {
+            DataClassification = ToBeClassified;
+            TableRelation = Customer;
+            Editable = false;
         }
     }
     keys
@@ -130,7 +146,6 @@ table 50100 BTLTest
         SSetup: Record "Sales & Receivables Setup";
         Nseries: Codeunit NoSeriesManagement;
     begin
-
         begin
             // Nseries.GetNextNo(SSetup."Customer Onboard No", Today, true);
             if No = '' then begin

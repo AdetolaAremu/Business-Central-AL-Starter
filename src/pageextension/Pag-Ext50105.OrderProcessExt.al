@@ -1,9 +1,17 @@
-pageextension 50101 OrderProcessExt extends "Order Processor Role Center"
+pageextension 50105 OrderProcessExt extends "Order Processor Role Center"
 {
     actions
     {
         addafter("Posted Documents")
         {
+            group(Employer)
+            {
+                action("Employers")
+                {
+                    ApplicationArea = All;
+                    RunObject = Page EmployerList;
+                }
+            }
             group("Onboarding")
             {
                 action("Open Onboarding")
@@ -32,7 +40,7 @@ pageextension 50101 OrderProcessExt extends "Order Processor Role Center"
                     ApplicationArea = All;
                     Caption = 'Submitted for approval Onboarding', comment = '="Customer Onboarding"';
                     RunObject = Page "Customer Onboarding Page";
-                    RunPageView = Where(is_submitted = const(false));
+                    RunPageView = Where("Customer ID" = filter(<> ''));
                 }
             }
         }
