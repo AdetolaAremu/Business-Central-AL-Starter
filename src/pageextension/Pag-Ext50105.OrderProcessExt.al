@@ -44,5 +44,21 @@ pageextension 50105 OrderProcessExt extends "Order Processor Role Center"
                 }
             }
         }
+
+        addafter("Customer/&Item Sales")
+        {
+            action("Customer Application")
+            {
+                ApplicationArea = Basic, Suite;
+                image = Customer;
+                ToolTip = 'This specifies customer onboarding report';
+                RunObject = report "Customer Application";
+
+                // trigger OnAction()
+                // begin
+
+                // end;
+            }
+        }
     }
 }

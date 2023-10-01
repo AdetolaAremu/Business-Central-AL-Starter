@@ -74,6 +74,13 @@ table 50130 Employer
                 Nseries.InitSeries(SSetup."Employer No", xRec."Number series", 0D, "Employer No", "Number series");
             end;
         end;
+        begin
+            if "Employer No" = '' then begin
+                SSetup.Get();
+                Ssetup.TestField("Employer No");
+                Nseries.InitSeries(SSetup."Employer No", xRec."Number series", 0D, "Employer No", "Number series");
+            end;
+        end;
 
         "Created_by" := UserId;
         "Created_on" := CurrentDateTime;

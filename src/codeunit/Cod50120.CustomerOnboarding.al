@@ -13,24 +13,20 @@ codeunit 50120 "Customer Onboarding"
         customer.Gender := custOnboarding.Gender;
         customer."Date of birth" := custOnboarding.Date_Of_Birth;
         customer."Marital Status" := custOnboarding.Marital_Status;
-        customer.Insert(true); //this is also a trigger oninsert
+        customer.Insert(true); //this is also a trigger like Oninsert
         custOnboarding."Customer ID" := customer."No.";
         custOnboarding.Modify(true);
         OnAferCustomerCreation(custOnboarding);
         exit(customer."No.");
     end;
 
-    [
-    IntegrationEvent(false, false)
-    ]
+    [IntegrationEvent(false, false)]
     local procedure OnBeforeCustomerCreation(custOnboarding: Record BTLTest)
     begin
 
     end;
 
-    [
-    IntegrationEvent(false, false)
-    ]
+    [IntegrationEvent(false, false)]
     local procedure OnAferCustomerCreation(custOnboarding: Record BTLTest)
     begin
 
