@@ -1,4 +1,4 @@
-page 50101 "Customer Onboarding Card"
+page 50113 "Customer Onboarding Card"
 {
     Caption = 'Customer Onboarding';
     PageType = Card;
@@ -76,6 +76,24 @@ page 50101 "Customer Onboarding Card"
                     ApplicationArea = All;
                     Editable = False;
                 }
+            }
+
+            part(Control1; "Customer Onboarding Employer")
+            {
+                Caption = 'Employer Details';
+                Editable = true;
+                ApplicationArea = All;
+                UpdatePropagation = Both;
+                SubPageLink = "Employer No." = field(Employer);
+            }
+        }
+        area(FactBoxes)
+        {
+            part("AttachmentDocument"; "Document Attachment Factbox")
+            {
+                ApplicationArea = All;
+                Caption = 'Attachment';
+                SubPageLink = "Table ID" = const(50100), "No." = field(No);
             }
         }
     }
@@ -176,6 +194,24 @@ page 50101 "Customer Onboarding Card"
                     approvalEntry.SetFilter("Approver ID", '<>%1', UserId);
                     if approvalEntry.FindFirst() then Error('You are not authorized');
                     // approvalEntry.CanCurrentUserEdit();
+                end;
+            }
+
+            action(Attachment)
+            {
+                ApplicationArea = All;
+                Image = Approve;
+                PromotedCategory = Process;
+                Promoted = true;
+
+                trigger OnAction()
+                var
+                    documentAttachment: Page "Document Attachment Details";
+                    recRef: RecordRef;
+                begin
+                    recRef.GetTable(Rec);
+                    documentAttachment.OpenForRecRef(recRef);
+                    documentAttachment.RunModal();
                 end;
             }
         }

@@ -4,7 +4,6 @@ table 50130 Employer
     DataClassification = ToBeClassified;
     DrillDownPageId = EmployerList;
 
-
     fields
     {
         field(6; "Employer No"; Code[20])

@@ -161,6 +161,6 @@ table 50100 BTLTest
 
     trigger OnModify()
     begin
-        TestField("Customer ID", '');
+        // TestField("Customer ID", '');
     end;
 }

@@ -20,6 +20,26 @@ codeunit 50120 "Customer Onboarding"
         exit(customer."No.");
     end;
 
+    procedure CreateCustomerExternal(name: Text[100]; email: Text[100]; phoneNo: Text[100]; gender: Option; dateOfBirth: Date; maritalStatus: Enum "Marital Status"): Code[20]
+    var
+        SSetup: Record "Sales & Receivables Setup";
+        Nseries: Codeunit NoSeriesManagement;
+        customer: Record Customer;
+    begin
+        SSetup.Get();
+        SSetup.TestField("Customer Nos.");
+        customer.Init();
+        customer."No." := Nseries.GetNextNo(SSetup."Customer Nos.", Today, true);
+        customer.Name := name;
+        customer."E-Mail" := email;
+        customer."Phone No." := phoneNo;
+        customer.Gender := gender;
+        customer."Date of birth" := dateOfBirth;
+        customer."Marital Status" := maritalStatus;
+        customer.Insert(true);
+        exit(customer."No.");
+    end;
+
     [IntegrationEvent(false, false)]
     local procedure OnBeforeCustomerCreation(custOnboarding: Record BTLTest)
     begin

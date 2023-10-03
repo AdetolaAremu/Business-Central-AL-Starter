@@ -39,5 +39,12 @@ page 50102 EmployerList
                 }
             }
         }
+        area(FactBoxes)
+        {
+            part("Employer Information"; "Employer Info")
+            {
+                SubPageLink = "Employer No" = FIELD("Employer No");
+            }
+        }
     }
 }
