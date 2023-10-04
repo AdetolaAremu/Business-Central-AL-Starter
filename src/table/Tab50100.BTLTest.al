@@ -2,6 +2,7 @@ table 50100 BTLTest
 {
     Caption = 'BTLTest';
     DataClassification = ToBeClassified;
+    // DrillDownPageId = 
 
     fields
     {
@@ -51,6 +52,14 @@ table 50100 BTLTest
         field(9; Phone_Number; Text[20])
         {
             Caption = 'Phone_Number';
+            ExtendedDatatype = PhoneNo;
+
+            trigger OnValidate()
+            var
+                phoneNoCodeUnit: Codeunit "Customer Onboarding";
+            begin
+                phoneNoCodeUnit.PhoneNumberValidation(Phone_Number);
+            end;
         }
         field(10; Marital_Status; Enum "Marital Status")
         {
@@ -60,6 +69,13 @@ table 50100 BTLTest
         {
             Caption = 'Email_Address';
             ExtendedDatatype = EMail;
+
+            trigger OnValidate()
+            var
+                customerOnboarding: CodeUnit "Customer Onboarding";
+            begin
+                customerOnboarding.EmailValidation("Email_Address");
+            end;
         }
         field(12; Physical_Address; Text[100])
         {
@@ -132,6 +148,77 @@ table 50100 BTLTest
             TableRelation = Customer;
             Editable = false;
         }
+        field(27; "Profile Picture"; Media)
+        {
+            DataClassification = ToBeClassified;
+            ExtendedDataType = Person;
+        }
+        field(28; Signature; Blob)
+        {
+            DataClassification = ToBeClassified;
+            Subtype = Bitmap;
+        }
+        field(29; "Global Dimension 1 Code"; Code[20])
+        {
+            CaptionClass = '1,1,1';
+            Caption = 'Global Dimension 1 Code';
+            DataClassification = ToBeClassified;
+            TableRelation = "Dimension Value".Code WHERE("Global Dimension No." = CONST(1));
+
+            trigger OnValidate()
+            begin
+                //ValidateShortcutDimCode(1,"Global Dimension 1 Code");
+            end;
+        }
+        field(30; "Global Dimension 2 Code"; Code[20])
+        {
+            CaptionClass = '1,1,2';
+            Caption = 'Global Dimension 2 Code';
+            DataClassification = ToBeClassified;
+            // Editable = false;
+            TableRelation = "Dimension Value".Code WHERE("Global Dimension No." = CONST(2));
+
+            trigger OnValidate()
+            begin
+                //ValidateShortcutDimCode(2,"Global Dimension 2 Code");
+            end;
+        }
+        field(31; Country; Code[20])
+        {
+            DataClassification = ToBeClassified;
+            TableRelation = Country;
+
+            trigger OnValidate()
+            var
+                getCountryName: Record Country;
+            begin
+                if getCountryName.Get(Country) then
+                    "Country Name" := getCountryName.Name;
+            end;
+        }
+        field(32; State; Code[20])
+        {
+            DataClassification = ToBeClassified;
+            TableRelation = State.Code where("Country Code" = field(Country));
+
+            trigger OnValidate()
+            var
+                getStateName: Record State;
+            begin
+                if getStateName.Get(State) then
+                    "State Name" := getStateName.Name;
+            end;
+        }
+        field(33; "Country Name"; Text[50])
+        {
+            DataClassification = ToBeClassified;
+            Editable = false;
+        }
+        field(34; "State Name"; Text[50])
+        {
+            DataClassification = ToBeClassified;
+            Editable = false;
+        }
     }
     keys
     {
@@ -139,6 +226,12 @@ table 50100 BTLTest
         {
             Clustered = true;
         }
+    }
+
+    fieldgroups
+    {
+        fieldgroup(DropDown; No, First_Name, Last_Name, Middle_Name, Phone_Number, Email_Address) { }
+        fieldgroup(Brick; No, First_Name, Last_Name, Middle_Name, Phone_Number, Email_Address) { }
     }
 
     trigger OnInsert()

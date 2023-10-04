@@ -51,4 +51,33 @@ codeunit 50120 "Customer Onboarding"
     begin
 
     end;
+
+    procedure EmailValidation(email: Text[50])
+    var
+        emailPattern: Text[50];
+        regex: Codeunit Regex;
+        matchRecord: Record Matches;
+    begin
+        emailPattern := '^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$';
+        regex.Match(email, emailPattern, matchRecord);
+        if not matchRecord.Success then Error('Email not in the correct format');
+    end;
+
+    procedure MyPhoneNumberLength()
+    var
+        myInt: Integer;
+    begin
+
+    end;
+
+    procedure PhoneNumberValidation(phoneNo: Text[15])
+    var
+        mobilePattern: Text[50];
+        regex: Codeunit Regex;
+        matchRec: Record Matches;
+    begin
+        mobilePattern := '/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/';
+        regex.Match(phoneNo, mobilePattern, matchRec);
+        if not matchRec.Success then Error('Phone number is not valid');
+    end;
 }
