@@ -47,4 +47,24 @@ page 50102 EmployerList
             }
         }
     }
+    actions
+    {
+        area(Processing)
+        {
+            action(ImportEmployerList)
+            {
+                ApplicationArea = All;
+                PromotedCategory = Category5;
+                Promoted = true;
+                image = Excel;
+
+                trigger OnAction()
+                var
+                    getEmpoyerXML: XmlPort "Import Employer";
+                begin
+                    getEmpoyerXML.Run();
+                end;
+            }
+        }
+    }
 }

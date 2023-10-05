@@ -245,6 +245,7 @@ page 50113 "Customer Onboarding Card"
                 end;
             }
 
+
             // action(Attachment)
             // {
             //     ApplicationArea = All;
@@ -277,6 +278,8 @@ page 50113 "Customer Onboarding Card"
             //     end;
             // }
         }
+
+
     }
 
     trigger OnAfterGetRecord()

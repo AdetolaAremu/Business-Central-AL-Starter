@@ -4,9 +4,14 @@ codeunit 50120 "Customer Onboarding"
         customer: Record Customer;
 
     procedure CreateCustomer(custOnboarding: Record BTLTest): Code[20]
+    var
+        ssetup: Record "Sales & Receivables Setup";
+        Nseries: Codeunit NoSeriesManagement;
     begin
         OnBeforeCustomerCreation(custOnboarding);
+        ssetup.Get();
         customer.Init();
+        customer."No." := Nseries.GetNextNo(ssetup."Customer Nos.", Today, true);
         customer.Name := StrSubstNo('%1 %2 %3', custOnboarding.First_Name, custOnboarding.Last_Name, custOnboarding.Middle_Name);
         customer."E-Mail" := custOnboarding.Email_Address;
         customer."Phone No." := custOnboarding.Phone_Number;
@@ -15,6 +20,7 @@ codeunit 50120 "Customer Onboarding"
         customer."Marital Status" := custOnboarding.Marital_Status;
         customer.Insert(true); //this is also a trigger like Oninsert
         custOnboarding."Customer ID" := customer."No.";
+        custOnboarding."Customer Created" := true;
         custOnboarding.Modify(true);
         OnAferCustomerCreation(custOnboarding);
         exit(customer."No.");
@@ -79,5 +85,52 @@ codeunit 50120 "Customer Onboarding"
         mobilePattern := '/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/';
         regex.Match(phoneNo, mobilePattern, matchRec);
         if not matchRec.Success then Error('Phone number is not valid');
+    end;
+
+    procedure ClearCustomerOnboardingTable()
+    var
+        customerOnboarding: Record BTLTest;
+    begin
+        customerOnboarding.Reset();
+        customerOnboarding.SetRange("Customer Created", true);
+        customerOnboarding.SetRange(status, customerOnboarding.status::Open);
+        if customerOnboarding.FindFirst() then customerOnboarding.DeleteAll();
+    end;
+
+    trigger OnRun()
+    var
+        custOnboarding: Record BTLTest;
+        ccRecipient: Text[100];
+        SSetup: Record "User Setup";
+    begin
+        custOnboarding.Reset();
+        custOnboarding.SetRange("Customer Created", false);
+        custOnboarding.SetRange(status, custOnboarding.status::Open);
+        if custOnboarding.FindSet() then
+            repeat
+                CreateCustomer(custOnboarding);
+                if SSetup.Get(UserId) then begin
+                    SSetup.TestField("E-Mail");
+                    // ccRecipient := StrSubstNo('%1, %2', custOnboarding.Email_Address, SSetup."E-Mail");
+                    ccRecipient := custOnboarding.Email_Address;
+                end;
+                sendEmail(custOnboarding.Email_Address, StrSubstNo('Customer with %1 %2 has been created', custOnboarding.First_Name, custOnboarding.Last_Name), StrSubstNo('Dear %1, <br> Your record has been created with number %1 <br> with Name %2 %3', custOnboarding.No, custOnboarding.First_Name, custOnboarding.Last_Name));
+            until custOnboarding.Next() = 0;
+
+        ClearCustomerOnboardingTable();
+    end;
+
+    procedure sendEmail(recipient: Text[100]; subject: Text[50]; Body: Text[200])
+    var
+        mail: codeunit "Email Message";
+        email: codeunit Email;
+        // emailExt: codeunit Mail;
+        userSetup: Record "User Setup";
+    begin
+        if (subject <> '') and (body <> '') then begin
+            mail.Create(recipient, subject, Body);
+            if userSetup.Get(UserId) then
+                email.Send(mail, Enum::"Email Scenario"::Default);
+        end
     end;
 }

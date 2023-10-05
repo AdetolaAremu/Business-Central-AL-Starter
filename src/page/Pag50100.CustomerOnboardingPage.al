@@ -37,4 +37,25 @@ page 50100 "Customer Onboarding Page"
             }
         }
     }
+    actions
+    {
+        area(Processing)
+        {
+            action(ImportEmployerList)
+            {
+                ApplicationArea = All;
+                PromotedCategory = Category5;
+                Promoted = true;
+                image = Excel;
+                Caption = 'Import Customers';
+
+                trigger OnAction()
+                var
+                    getEmpoyerXML: XmlPort "Customer Onboarding XML";
+                begin
+                    getEmpoyerXML.Run();
+                end;
+            }
+        }
+    }
 }

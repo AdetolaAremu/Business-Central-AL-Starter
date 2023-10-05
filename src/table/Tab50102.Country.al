@@ -19,7 +19,6 @@ table 50144 Country
         {
             Caption = 'Country Code';
         }
-
     }
     keys
     {

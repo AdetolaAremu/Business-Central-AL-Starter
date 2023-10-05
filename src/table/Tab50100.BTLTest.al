@@ -54,12 +54,12 @@ table 50100 BTLTest
             Caption = 'Phone_Number';
             ExtendedDatatype = PhoneNo;
 
-            trigger OnValidate()
-            var
-                phoneNoCodeUnit: Codeunit "Customer Onboarding";
-            begin
-                phoneNoCodeUnit.PhoneNumberValidation(Phone_Number);
-            end;
+            // trigger OnValidate()
+            // var
+            //     phoneNoCodeUnit: Codeunit "Customer Onboarding";
+            // begin
+            //     phoneNoCodeUnit.PhoneNumberValidation(Phone_Number);
+            // end;
         }
         field(10; Marital_Status; Enum "Marital Status")
         {
@@ -218,6 +218,10 @@ table 50100 BTLTest
         {
             DataClassification = ToBeClassified;
             Editable = false;
+        }
+        field(35; "Customer Created"; Boolean)
+        {
+            DataClassification = ToBeClassified;
         }
     }
     keys
