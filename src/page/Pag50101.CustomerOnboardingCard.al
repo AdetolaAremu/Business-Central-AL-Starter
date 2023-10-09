@@ -1,4 +1,4 @@
-page 50113 "Customer Onboarding Card"
+page 90006 "Customer Onboarding Card"
 {
     Caption = 'Customer Onboarding';
     PageType = Card;

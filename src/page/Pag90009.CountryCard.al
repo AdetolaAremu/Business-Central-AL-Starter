@@ -1,26 +1,27 @@
-page 90007 Country
+page 90009 "Country Card"
 {
-    Caption = 'Country';
-    PageType = List;
+    Caption = 'Country Card';
+    PageType = Card;
     SourceTable = Country;
-    CardPageId = "Country Card";
+
     layout
     {
         area(content)
         {
-            repeater(General)
+            group(General)
             {
+                Caption = 'General';
+
                 field("Code"; Rec."Code")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the value of the Code field.';
                 }
-                field(Name; Rec.Name)
+                field(name; Rec.Name)
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the value of the name field.';
                 }
-
             }
         }
     }
